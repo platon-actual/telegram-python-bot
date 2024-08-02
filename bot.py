@@ -1,4 +1,4 @@
-from bot_token import TOKEN
+from bot_token import TOKEN, IMAGE_POST_URL
 
 from urllib.request import urlretrieve
 import telebot
@@ -38,7 +38,7 @@ def send_same_photo(message):
     bot.send_message(message.chat.id, "puede descargarla de https://ramirorios.pythonanywhere.com/")
     bot.send_photo(message.chat.id, message.photo[1].file_id)
 
-    url = 'http://ramirorios.pythonanywhere.com/post_image'
+    url = IMAGE_POST_URL + '/post_image'
     my_photo = {'image': open("download/" + photo3.file_path, 'rb')}
     x = requests.post(url, files=my_photo)
     print(x.json)
