@@ -38,10 +38,10 @@ def send_same_photo(message):
     bot.send_message(message.chat.id, "puede descargarla de https://ramirorios.pythonanywhere.com/")
     bot.send_photo(message.chat.id, message.photo[1].file_id)
 
-    url = '192.168.1.131:4000/post_image'
+    url = 'http://ramirorios.pythonanywhere.com/post_image'
     my_photo = {'image': open("download/" + photo3.file_path, 'rb')}
     x = requests.post(url, files=my_photo)
-    print(x.text)
+    print(x.json)
 
 
 bot.infinity_polling()
