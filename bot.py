@@ -35,8 +35,8 @@ def send_same_photo(message):
     urlretrieve(PHOTO_DL_URL + photo3.file_path, "download/" + photo3.file_path)
 
     bot.reply_to(message, "Oh, una foto! la descargaré")
-    bot.send_message(message.chat.id, "puede descargarla de https://ramirorios.pythonanywhere.com/")
-    bot.send_photo(message.chat.id, message.photo[1].file_id)
+    bot.send_message(message.chat.id, "puede verla en línea en https://ramirorios.pythonanywhere.com/")
+    #bot.send_photo(message.chat.id, message.photo[1].file_id)
 
     url = IMAGE_POST_URL + '/post_image'
     my_photo = {'image': open("download/" + photo3.file_path, 'rb')}
