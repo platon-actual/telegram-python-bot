@@ -7,6 +7,31 @@ from telebot import types
 
 PHOTO_DL_URL = "https://api.telegram.org/file/bot" + TOKEN + "/"
 
+def get_images_from_filelist():
+    try:
+        image_list_file = open("image_list.txt", 'r')
+        image_list = []
+        for file in image_list_file.readlines():
+            image_list.append( file.replace('\n', '') )
+        image_list_file.close()
+        return image_list
+    except:
+        print(FileNotFoundError.strerror())
+        image_list_file = open("image_list.txt", "w")
+        image_list_file.close()
+        # image_list_file = open("image_list.txt", 'r')
+        return []
+    finally:
+        pass
+
+def write_last_image(image):
+    pass
+
+GLOBAL_IMAGE_LIST = get_images_from_filelist()
+for image in GLOBAL_IMAGE_LIST:
+    print (image)
+#print (GLOBAL_IMAGE_LIST)
+
 bot = telebot.TeleBot(TOKEN, parse_mode=None)
 
 @bot.message_handler(commands=['start'])
@@ -41,10 +66,16 @@ def send_last_photos(command):
             bot.reply_to(command.message, "Entra a https://ramirorios.pythonanywhere.com/ para ver las últimas 3 fotos!")
             bot.send_message(command.message.chat.id, "TODO: ver 3 fotos.")
         if command.data == 'view_last_photo':
-            bot.send_message(command.message.chat.id, "TODO: ver ultima foto..")
+            # DONE #bot.send_message(command.message.chat.id, "TODO: ver ultima foto..")
+            bot.send_message(command.message.chat.id, "La última foto ->")
+            bot.send_photo(command.message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[0], 'rb'))
         if command.data == 'donate':
-            bot.send_message(command.message.chat.id, "GRACIAS!!!!")
+            bot.send_message(command.message.chat.id, "En Argentina pueden donar en pesos a MercadoPago")
+            bot.send_message(command.message.chat.id, "Alias: mimujermedicenerd")
+            bot.send_message(command.message.chat.id, "GRACIAS!")
     #pass
+
+
 
 @bot.message_handler(content_types=['photo'])
 def send_same_photo(message):
@@ -59,10 +90,12 @@ def send_same_photo(message):
         return False
     #print (photo1)
     #print (photo2)
-    print (photo3)
+    print (" -DESCARGANDO FOTO photo3-")
+    print ( photo3.file_path )
     urlretrieve(PHOTO_DL_URL + photo3.file_path, "download/" + photo3.file_path)
 
     bot.reply_to(message, "Oh, una foto! la descargaré")
+    bot.send_message(message.chat.id, "Espera por favor...")
     
     # sube la imagen a flask
     url = IMAGE_POST_URL + '/post_image'
