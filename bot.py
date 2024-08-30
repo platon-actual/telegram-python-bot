@@ -47,6 +47,16 @@ for image in GLOBAL_IMAGE_LIST:
 
 bot = telebot.TeleBot(TOKEN, parse_mode=None)
 
+# Lista de comandos con '/'
+bot.set_my_commands(
+    commands=[
+        telebot.types.BotCommand("/view_last_photos", "Ver las 3 fotos"),
+        telebot.types.BotCommand("/donate", "Donar"),
+        telebot.types.BotCommand("/view_photo", "Ver la última foto")
+    ],
+    scope= telebot.types.BotCommandScopeAllPrivateChats()
+)
+
 @bot.message_handler(commands=['start'])
 def send_hello(message):
     bot.reply_to(message, "Hola, cómo estás?")
