@@ -7,9 +7,11 @@ from telebot import types
 
 PHOTO_DL_URL = "https://api.telegram.org/file/bot" + TOKEN + "/"
 
-def get_images_from_filelist():
+IMAGE_LIST_FILE = "image_list.txt"
+
+def get_images_from_filelist(image_text_file):
     try:
-        image_list_file = open("image_list.txt", 'r')
+        image_list_file = open(image_text_file, 'r')
         image_list = []
         for file in image_list_file.readlines():
             image_list.append( file.replace('\n', '') )
@@ -17,17 +19,28 @@ def get_images_from_filelist():
         return image_list
     except:
         print(FileNotFoundError.strerror())
-        image_list_file = open("image_list.txt", "w")
+        image_list_file = open(image_text_file, "w")
         image_list_file.close()
         # image_list_file = open("image_list.txt", 'r')
         return []
     finally:
+        # esto lo puedo borrar, pero no quiero.
         pass
 
-def write_last_image(image):
-    pass
+def write_last_image(new_image_path):
+    image_list = get_images_from_filelist(IMAGE_LIST_FILE)
+    
+    image_list.insert(0, new_image_path)
+    print(image_list.pop())
 
-GLOBAL_IMAGE_LIST = get_images_from_filelist()
+    list_file = open(IMAGE_LIST_FILE, "w")
+    GLOBAL_IMAGE_LIST.clear()
+    for photo_path in image_list:
+        list_file.writelines(photo_path + '\n')
+        GLOBAL_IMAGE_LIST.append(photo_path)
+    list_file.close()
+
+GLOBAL_IMAGE_LIST = get_images_from_filelist(IMAGE_LIST_FILE)
 for image in GLOBAL_IMAGE_LIST:
     print (image)
 #print (GLOBAL_IMAGE_LIST)
@@ -64,7 +77,13 @@ def send_last_photos(command):
         if command.data == 'view_photos':
             # enviar las 3 fotos más recientes
             bot.reply_to(command.message, "Entra a https://ramirorios.pythonanywhere.com/ para ver las últimas 3 fotos!")
-            bot.send_message(command.message.chat.id, "TODO: ver 3 fotos.")
+            # bot.send_message(command.message.chat.id, "TODO: ver 3 fotos.")
+            if len(GLOBAL_IMAGE_LIST) > 0:
+                bot.send_photo(command.message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[0], 'rb'))
+                bot.send_photo(command.message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[1], 'rb'))
+                bot.send_photo(command.message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[2], 'rb'))
+            else:
+                bot.reply_to(command.message, "Aún no hay fotos! Por favor, envíame una foto")
         if command.data == 'view_last_photo':
             # DONE #bot.send_message(command.message.chat.id, "TODO: ver ultima foto..")
             bot.send_message(command.message.chat.id, "La última foto ->")
@@ -78,7 +97,7 @@ def send_last_photos(command):
 
 
 @bot.message_handler(content_types=['photo'])
-def send_same_photo(message):
+def receive_photo(message):
     #for photo_x in message.photo:
     #    print (photo_x.file_id)
     #print (bot.get_file(message.photo[0].file_id))
@@ -92,6 +111,7 @@ def send_same_photo(message):
     #print (photo2)
     print (" -DESCARGANDO FOTO photo3-")
     print ( photo3.file_path )
+    # Se descarga la foto al directorio de descargas local download/
     urlretrieve(PHOTO_DL_URL + photo3.file_path, "download/" + photo3.file_path)
 
     bot.reply_to(message, "Oh, una foto! la descargaré")
@@ -102,6 +122,15 @@ def send_same_photo(message):
     my_photo = {'image': open("download/" + photo3.file_path, 'rb')}
     x = requests.post(url, files=my_photo)
     print(x.json)
+
+    # guarda la imágen en la lista
+
+    photo_dir, photo_file_name = photo3.file_path.split('/')
+
+    write_last_image( photo_file_name)
+    print("El dir es ", photo_dir)
+    print("El filename es ", photo_file_name)
+
 
     bot.send_message(message.chat.id, "Listo! Puedes verla en línea en https://ramirorios.pythonanywhere.com/")
     #bot.send_photo(message.chat.id, message.photo[1].file_id)
