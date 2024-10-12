@@ -99,7 +99,7 @@ def send_last_photos(command):
             # DONE #bot.send_message(command.message.chat.id, "TODO: ver ultima foto..")
             bot.send_message(command.message.chat.id, "La última foto ->")
             bot.send_photo(command.message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[0], 'rb'))
-        if command.data == 'donate':
+        if command.data == 'donate' or command.data == '/donate':
             bot.send_message(command.message.chat.id, "En Argentina pueden donar en pesos a MercadoPago")
             bot.send_message(command.message.chat.id, "Alias: mimujermedicenerd")
             bot.send_message(command.message.chat.id, "GRACIAS!")
