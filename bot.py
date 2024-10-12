@@ -85,7 +85,7 @@ def echo_all(message):
 @bot.callback_query_handler(func= lambda m: True)
 def send_last_photos(command):
     if command.message:
-        if command.data == 'view_photos':
+        if command.data == 'view_photos' or command.data == "/view_photos":
             # enviar las 3 fotos más recientes
             bot.reply_to(command.message, "Entra a https://ramirorios.pythonanywhere.com/ para ver las últimas 3 fotos!")
             # bot.send_message(command.message.chat.id, "TODO: ver 3 fotos.")
