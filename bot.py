@@ -68,8 +68,8 @@ def send_help(message):
 
 @bot.message_handler(commands=['view_last_photos'])
 def send_last_three_photos(message):
-    bot.send_photo(command.message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[1], 'rb'))
-#    bot.send_photo(message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[1], 'rb'))
+#    bot.send_photo(command.message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[1], 'rb'))
+    bot.send_photo(message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[1], 'rb'))
 #    bot.
 @bot.message_handler(func= lambda m: True)
 def echo_all(message):
