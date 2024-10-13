@@ -81,8 +81,8 @@ def send_help(message):
 def send_last_three_photos(message):
 #    bot.send_photo(command.message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[1], 'rb'))
     bot.send_photo(message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[0], 'rb'))
-    bot.send_photo(mesaage.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[1], 'rb'))
-    bot.send_photo(mesaage.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[2], 'rb'))
+    bot.send_photo(message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[1], 'rb'))
+    bot.send_photo(message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[2], 'rb'))
 
 #    bot.
 
@@ -94,7 +94,7 @@ def send_donate(message):
     # Paypal es lo que hay por ahora...
 @bot.message_handler(commands=['view_last_photo'])
 def send_last_photo(message):
-    bot.send_photo(mesaage.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[0], 'rb'))
+    bot.send_photo(message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[0], 'rb'))
 
 @bot.message_handler(func= lambda m: True)
 def echo_all(message):
