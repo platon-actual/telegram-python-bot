@@ -45,15 +45,26 @@ for image in GLOBAL_IMAGE_LIST:
     print (image)
 #print (GLOBAL_IMAGE_LIST)
 
+#2024-10-13 defino funciones, para enviar fotos
+#def send_last_photo():
+#    pass
+#def send_last_3_photos():
+#    pass
+# y para pedir donaciones jajaja
+#def send_donate():
+#    pass
+
+
 bot = telebot.TeleBot(TOKEN, parse_mode=None)
 
 # Lista de comandos con '/'
 bot.set_my_commands(
     commands=[
-# 2024.10.12 edito comandos
+# 2024.10.13 edito comandos
+        telebot.types.BotCommand("start", "Comenzar!"),
         telebot.types.BotCommand("view_last_photos", "Ver las 3 fotos"),
         telebot.types.BotCommand("donate", "Donar"),
-        telebot.types.BotCommand("/view_photo", "Ver la última foto")
+        telebot.types.BotCommand("view_photo", "Ver la última foto")
     ],
     scope= telebot.types.BotCommandScopeAllPrivateChats()
 )
@@ -64,13 +75,27 @@ def send_hello(message):
 
 @bot.message_handler(commands=['help'])
 def send_help(message):
-    bot.reply_to(message, "Enviando ayuda... prueba escribirme o enviar una imágen")
+    bot.reply_to(message, "Enviando ayuda... prueba esc7ribirme o enviar una imágen")
 
 @bot.message_handler(commands=['view_last_photos'])
 def send_last_three_photos(message):
 #    bot.send_photo(command.message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[1], 'rb'))
-    bot.send_photo(message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[1], 'rb'))
+    bot.send_photo(message.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[0], 'rb'))
+    bot.send_photo(mesaage.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[1], 'rb'))
+    bot.send_photo(mesaage.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[2], 'rb'))
+
 #    bot.
+
+#2024-10-13 agrego comandos view_last_photo y donate
+@bot.message_handler(commands=['donate'])
+def send_donate(message):
+    bot.send_message(message.chat.id, "https://www.paypal.me/ramiroivanrios")
+    bot.send_message(message.chat.id, "GRACIAS!")
+    # Paypal es lo que hay por ahora...
+@bot.message_handler(commands=['view_last_photo'])
+def send_last_photo(message):
+    bot.send_photo(mesaage.chat.id, open("download/photos/" + GLOBAL_IMAGE_LIST[0], 'rb'))
+
 @bot.message_handler(func= lambda m: True)
 def echo_all(message):
     # un teclado de opciones:
@@ -90,7 +115,7 @@ def echo_all(message):
 @bot.callback_query_handler(func= lambda m: True)
 def send_last_photos(command):
     if command.message:
-        if command.data == 'view_photos' or command.data == "/view_photos":
+        if command.data == 'view_photos' or command.data == "view_photos":
             # enviar las 3 fotos más recientes
             bot.reply_to(command.message, "Entra a https://ramirorios.pythonanywhere.com/ para ver las últimas 3 fotos!")
             # bot.send_message(command.message.chat.id, "TODO: ver 3 fotos.")
